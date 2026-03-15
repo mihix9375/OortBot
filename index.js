@@ -32,7 +32,7 @@ for (const file of commandFiles)
 	}
 	else
 	{
-		cosole.warn(`${filePath} にdataかexecuteが含まれていません。`);
+		console.warn(`${filePath} にdataかexecuteが含まれていません。`);
 	}
 }
 
@@ -42,7 +42,7 @@ client.on("interactionCreate", async interaction => {
 	const command = interaction.client.commands.get(interaction.commandName);
 
 	if (!command) {
-		console.error(`${interacrtion.commandName} が見つかりません。`);
+		console.error(`${interaction.commandName} が見つかりません。`);
 		return;
 	}
 
