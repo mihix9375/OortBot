@@ -7762,5 +7762,17 @@
     "appendCombo": "-",
     "duration": "2:12",
     "bpm": "183"
+  },
+  {
+    "id": "648",
+    "title": "アルカリレットウセイ",
+    "expertLevel": "24",
+    "masterLevel": "30",
+    "appendLevel": "-",
+    "expertCombo": "0854",
+    "masterCombo": "1211",
+    "appendCombo": "-",
+    "duration": "2:06",
+    "bpm": "158"
   }
 ]

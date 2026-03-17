@@ -1,8 +1,8 @@
-const fs = require("node:fs");
-const path = require("node:path");
+const fs 					= require("node:fs");
+const path 					= require("node:path");
 const { Client, GatewayIntentBits, Collection } = require("discord.js");
-const { token } = require("./config.json");
-const musicList = require('./data/Musics.json');
+const { token } 				= require("./config.json");
+const musicList 				= require('./data/Musics.json');
 const client = new Client({
 	intents: Object.values(GatewayIntentBits).reduce((a, b) => a | b)
 });
@@ -14,17 +14,17 @@ const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith("
 console.log(commandFiles);
 
 client.musicData = {
-	list: musicList,
-	idMap: new Map(musicList.map(music => [music.id, music])),
-	titleMap: new Map(musicList.map(music => [music.title, music])),
+	list: 		musicList,
+	idMap: 		new Map(musicList.map(music => [music.id, 		music])),
+	titleMap:	new Map(musicList.map(music => [music.title, 		music])),
 };
 
 console.log(`♪ ${musicList.length} 曲を読み込みました。`);
 
 for (const file of commandFiles)
 {
-	const filePath = path.join(commandsPath, file);
-	const command = require(filePath);
+	const filePath 	= path.join(commandsPath, file);
+	const command 	= require(filePath);
 
 	if ("data" in command && "execute" in command)
 	{
