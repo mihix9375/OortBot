@@ -1,8 +1,11 @@
+require("./src/createTable.js");
+
 const fs 								= require("node:fs");
 const path 								= require("node:path");
 const { Client, GatewayIntentBits, Collection, InteractionType } 	= require("discord.js");
 const { token } 							= require("./config.json");
 const musicList 							= require('./data/Musics.json');
+const checkSchedule 							= require("./src/checkSchedule.js");
 const client = new Client({
 	intents: Object.values(GatewayIntentBits).reduce((a, b) => a | b)
 });
@@ -87,8 +90,9 @@ client.on("interactionCreate", async interaction => {
 });
 
 
-client.on("ready", () => {
+client.once("ready", async () => {
 	console.log(`${client.user.tag} でログインしています。`);
+	await checkSchedule.CheckSchedule(client);
 });
 
 client.login(token);

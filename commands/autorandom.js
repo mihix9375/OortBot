@@ -18,7 +18,14 @@ module.exports = {
 
 	async buttonHandler(interaction)
 	{
-		await interaction.showModal(await handler.buttonHandler(interaction));
+		if (interaction.customId.split("_").pop() === "0")
+		{
+			await interaction.update(await handler.buttonHandlerFirst(interaction)); 
+		}
+		else
+		{
+			await interaction.showModal(await handler.buttonHandler(interaction));
+		}
 	},
 
 	async modalHandler(interaction)
@@ -42,7 +49,7 @@ module.exports = {
 		.addComponents(onceButton, repeatButton);
 		
 		await interaction.reply({
-			content: "1度きりか複数回繰り返すか選んでください [1/3]",
+			content: "1度きりか複数回繰り返すか選んでください",
 			components: [row],
 			ephemeral: true
 		});

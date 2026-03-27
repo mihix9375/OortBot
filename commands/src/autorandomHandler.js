@@ -1,44 +1,79 @@
 const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
-const ui = require("./autorandomUI.js");
-const tempSchedule = new Map();
+const fs 		= require("node:fs");
+const processor 	= require("./autorandomProcessor.js");
+const ui		= require("./autorandomUI.js");
+const tempData 		= new Map();
+const button 		= new Map();
+const progressData 	= new Map();
+
+async function buttonHandlerFirst(interaction)
+{
+	if (!interaction.customId.startsWith("autorandom_")) return;
+
+	let contents;
+	let isRepeat;
+	if (interaction.customId.includes("once"))
+	{
+		const row = new ActionRowBuilder()
+		.addComponents(ui.schedule_once, ...ui.row.components);
+
+		contents = {
+			content: "日時: 未設定\n選曲条件: 未設定\nメッセージ設定: 未設定",
+			components: [row]
+		}
+
+		isRepeat = false;
+	}
+	else if (interaction.customId.includes("repeat"))
+	{
+		const row = new ActionRowBuilder()
+		.addComponents(ui.schedule_repeat, ...ui.row.components);
+
+		contents = {
+			content: "日時: 未設定\n選曲条件: 未設定\nメッセージ設定: 未設定",
+			components: [row]
+		}
+
+		isRepeat = true;
+	}
+
+	progressData.set(interaction.user.id, {
+		prog: [false, false, false]
+	});
+
+	tempData.set(interaction.user.id, {
+		schedule: null,
+		random: null,
+		content: null,
+		isRepeat: isRepeat
+	});
+
+	return contents;
+}
 
 async function buttonHandler(interaction)
 {
 	if (!interaction.customId.startsWith("autorandom_")) return;
 
 	let modal;
-	let prog = interaction.customId.split("_").pop();
+	let seq = interaction.customId.split("_").pop();
 		
-	if (interaction.customId.includes("autorandom_button_once"))
+	if (interaction.customId.includes("once") && seq === "1")
 	{
-		switch (prog)
-		{
-			case "0":
-				modal = ui.ScheduleSetting(0);
-				break;
-			case "1":				
-				modal = ui.RandomSetting();
-				break;
-			case "2":
-				modal = ui.ContentSetting();
-				break;
-		}
+		modal = ui.ScheduleSetting(0);
 	}
-	else if (interaction.customId.includes("autorandom_button_repeat"))
+	else if (interaction.customId.includes("repeat") && seq === "1")
 	{
-		switch (prog)
-		{
-			case "0":
-				modal = ui.ScheduleSetting(1);
-				break;
-			case "1":
-				modal = ui.RandomSetting();
-				break;
-			case "2":
-				modal = ui.ContentSetting();
-				break;
-		}
+		modal = ui.ScheduleSetting(1);
 	}	
+	else if (seq === "2")
+	{
+		modal = ui.RandomSetting();
+	}
+	else if (seq === "3")
+	{
+		modal = ui.ContentSetting();
+	}
 
 	return modal;
 }
@@ -46,38 +81,80 @@ async function buttonHandler(interaction)
 async function modalHandler(interaction)
 {
 	if (!interaction.customId.startsWith("autorandom_")) return;
+	
+	const seq = interaction.customId.split("_").pop();
+	const progress = progressData.get(interaction.user.id);
+	const temp = tempData.get(interaction.user.id);
+	const row = new ActionRowBuilder();
 
-	const time = interaction.fields.getTextInputValue("input_time");
-	const month = interaction.fields.getTextInputValue("input_month");
-	const day = interaction.fields.getTextInputValue("input_day");
-
-	tempSchedule.set(
-		interaction.user.id,
-		{
-			time: time,
-			month: month,
-			day: day
-		}
-	);
-
-	let row;
-	if (interaction.customId.includes("once"))
+	if (interaction.customId.includes("once") && seq === "1")
 	{
-		const prevbtn = new ButtonBuilder()
-		.setCustomId("autorandom_button_once_0")
-		.setLabel("戻る")
-		.setStyle(ButtonStyle.Primary);
+		[temp.schedule, progress.prog[0]] = await processor.ScheduleSettingProcess(interaction, false, progress.prog);
+	}
+	else if (interaction.customId.includes("repeat") && seq === "1")
+	{
+		[temp.schedule, progress.prog[0]] = await processor.ScheduleSettingProcess(interaction, true);
+	
+	}
+	else if (seq === "2")
+	{
+		[temp.random, progress.prog[1]] = await processor.RandomSettingProcess(interaction);
+	}
+	else if (seq === "3")
+	{
+		[temp.contentData, progress.prog[2]] = await processor.ContentSettingProcess(interaction);
+	}
+	
+	if (temp.isRepeat)
+	{
+		row.setComponents(ui.schedule_repeat, ...ui.row.components);
+	}
+	else if (!temp.isRepeat)
+	{
+		row.setComponents(ui.schedule_once, ...ui.row.components);
+	}	
 
-		const nextbtn = new ButtonBuilder()
-		.setCustomId("autorandom_button_once_1")
-		.setLabel("次に進む")
-		.setStyle(ButtonStyle.Success);
+	let content = "日時: ";
+	
+	if (progress.prog[0])
+	{
+		content += "設定済み\n";
+	}
+	else 
+	{
+		content += "未設定\n";
+	}
 
-		row = new ActionRowBuilder().addComponents(prevbtn, nextbtn);
+	content += "選曲条件: "
+
+	if (progress.prog[1])
+	{
+		content += "設定済み\n";
+	}
+	else
+	{
+		content += "未設定\n";
+	}
+
+	content += "メッセージ設定: "
+
+	if (progress.prog[2])
+	{
+		content += "設定済み\n";
+	}
+	else
+	{
+		content += "未設定";
+	}
+
+	let components;
+	if (progress.prog[0] && progress.prog[1] && progress.prog[2])
+	{
+		row.setComponents(...row.components, ui.submit);
 	}
 
 	let contents = {
-		content: "次に進んでください\n設定しなおす場合は戻るを押してください [2/3]",
+		content: content,
 		components: [row]
 	};
 
@@ -85,6 +162,7 @@ async function modalHandler(interaction)
 }
 
 module.exports = {
+	buttonHandlerFirst,
 	buttonHandler,
 	modalHandler
 }
