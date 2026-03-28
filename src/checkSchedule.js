@@ -1,5 +1,6 @@
 const schedule 	= require("node-schedule");
 const table 	= require("./createTable.js");
+const runSchedule = require("../commands/src/runSchedule.js");
 
 async function CheckSchedule(client)
 {
@@ -13,7 +14,7 @@ async function CheckSchedule(client)
 
 		if (task.is_repeat === 1 && target <= now)
 		{
-			while ( target <= now)
+			while (target <= now)
 			{
 				target += interval;
 			}
@@ -22,10 +23,7 @@ async function CheckSchedule(client)
 			updateTarget.run(target, task.id);
 		}
 
-		schedule.scheduleJob(new Date(target), async function(){
-			const channel = await client.channels.fetch(task.channel_id);
-			await channel.send(task.message);
-		});
+		await runSchedule.RunSchedule(client, task.id);
 	}
 }
 

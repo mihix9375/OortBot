@@ -9,13 +9,15 @@ const db 	= new DataBase(dbPath);
 db.exec(`
 	CREATE TABLE IF NOT EXISTS schedules (
 	id INTEGER PRIMARY KEY AUTOINCREMENT,
-	guild_id TEXT NOT NULL,
 	user_id TEXT NOT NULL,
-	schedule_type TEXT NOT NULL,
+	is_repeat INTEGER NOT NULL,
 	current INTEGER NOT NULL,
+	start INTEGER NOT NULL,
 	target INTEGER NOT NULL,
 	interval INTEGER NOT NULL,
 	channel_id TEXT NOT NULL,
+	random_setting TEXT NOT NULL,
+	musics TEXT NOT NULL,
 	message TEXT NOT NULL
 	)
 `);

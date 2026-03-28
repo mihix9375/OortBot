@@ -51,27 +51,29 @@ function ScheduleSetting(num)
 		const timeInput = new TextInputBuilder()
 		.setCustomId("input_time")
 		.setLabel("送信する時刻")
-		.setPlaceholder("例(16時5分の場合): 1605") 
+		.setPlaceholder("例(16時5分の場合): 16/05") 
 		.setStyle(TextInputStyle.Short)
 		.setRequired(true)
-		.setMaxLength(4)
-		.setMinLength(4);
+		.setMaxLength(5)
+		.setMinLength(5);
 
 		const monthInput = new TextInputBuilder()
 		.setCustomId("input_month")
 		.setLabel("送信する月(任意)")
-		.setPlaceholder("例(5月の場合): 5")
+		.setPlaceholder("例(5月の場合): 05")
 		.setStyle(TextInputStyle.Short)
 		.setRequired(false)
-		.setMaxLength(2);
+		.setMaxLength(2)
+		.setMinLength(2);
 
 		const dayInput = new TextInputBuilder()
 		.setCustomId("input_day")
 		.setLabel("送信する日(任意)")
-		.setPlaceholder("例(8日の場合): 8")
+		.setPlaceholder("例(8日の場合): 08")
 		.setStyle(TextInputStyle.Short)
 		.setRequired(false)
-		.setMaxLength(2);
+		.setMaxLength(2)
+		.setMinLength(2);
 
 		modal.addComponents(
 			new ActionRowBuilder().addComponents(timeInput),
@@ -99,18 +101,20 @@ function ScheduleSetting(num)
 		const monthInput = new TextInputBuilder()
 		.setCustomId("input_month")
 		.setLabel("送信する月(任意)")
-		.setPlaceholder("例(5月の場合): 5")
+		.setPlaceholder("例(5月の場合): 05")
 		.setStyle(TextInputStyle.Short)
 		.setRequired(false)
-		.setMaxLength(2);
+		.setMaxLength(2)
+		.setMinLength(2);
 
 		const dayInput = new TextInputBuilder()
 		.setCustomId("input_day")
 		.setLabel("送信する日(任意)")
-		.setPlaceholder("例(8日の場合): 8")
+		.setPlaceholder("例(8日の場合): 08")
 		.setStyle(TextInputStyle.Short)
 		.setRequired(false)
-		.setMaxLength(2);
+		.setMaxLength(2)
+		.setMinLength(2);
 
 		const interval = new TextInputBuilder()
 		.setCustomId("input_interval")
@@ -200,7 +204,7 @@ function RandomSetting()
 	);
 
 	const rangeLabel = new LabelBuilder()
-	.setLabel("レベル範囲(max/min)")
+	.setLabel("レベル範囲(min/max)")
 	.setTextInputComponent(range);
 
 	const numLabel = new LabelBuilder()

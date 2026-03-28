@@ -2,6 +2,7 @@ const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
 const fs 		= require("node:fs");
 const processor 	= require("./autorandomProcessor.js");
 const ui		= require("./autorandomUI.js");
+const inserter 		= require("./insertData.js");
 const tempData 		= new Map();
 const button 		= new Map();
 const progressData 	= new Map();
@@ -78,6 +79,29 @@ async function buttonHandler(interaction)
 	return modal;
 }
 
+async function buttonHandlerLast(interaction)
+{
+	const user_id = interaction.user.id;
+	const [suc, id] = await inserter.ParseData(tempData.get(user_id), interaction.client);
+	
+	if (suc)
+	{
+		contents = {
+			content: "正常に終了しました"
+		};
+	}
+	else
+	{
+		contents = {
+			content: "正常に終了しませんでした"
+		};
+	}
+
+	delete tempData.user_id;
+
+	return contents;
+}
+
 async function modalHandler(interaction)
 {
 	if (!interaction.customId.startsWith("autorandom_")) return;
@@ -102,7 +126,7 @@ async function modalHandler(interaction)
 	}
 	else if (seq === "3")
 	{
-		[temp.contentData, progress.prog[2]] = await processor.ContentSettingProcess(interaction);
+		[temp.content, progress.prog[2]] = await processor.ContentSettingProcess(interaction);
 	}
 	
 	if (temp.isRepeat)
@@ -164,5 +188,6 @@ async function modalHandler(interaction)
 module.exports = {
 	buttonHandlerFirst,
 	buttonHandler,
+	buttonHandlerLast,
 	modalHandler
 }

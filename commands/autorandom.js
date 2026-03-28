@@ -7,7 +7,6 @@ const { SlashCommandBuilder,
 	TextInputBuilder,
 	TextInputStyle
 	}		= 	require("discord.js");
-const randommusic 	=	require("./src/musicSelector.js");
 const handler		=	require("./src/autorandomHandler.js");
 
 module.exports = {
@@ -18,9 +17,14 @@ module.exports = {
 
 	async buttonHandler(interaction)
 	{
+		if (!interaction.customId.startsWith("autorandom_")) return;
 		if (interaction.customId.split("_").pop() === "0")
 		{
 			await interaction.update(await handler.buttonHandlerFirst(interaction)); 
+		}
+		else if (interaction.customId.split("_").pop() === "submit")
+		{
+			await interaction.update(await handler.buttonHandlerLast(interaction));
 		}
 		else
 		{
