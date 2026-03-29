@@ -1,8 +1,11 @@
-const fs 					= require("node:fs");
-const path 					= require("node:path");
-const { Client, GatewayIntentBits, Collection } = require("discord.js");
-const { token } 				= require("./config.json");
-const musicList 				= require('./data/Musics.json');
+require("./src/createTable.js");
+
+const fs 								= require("node:fs");
+const path 								= require("node:path");
+const { Client, GatewayIntentBits, Collection, InteractionType } 	= require("discord.js");
+const { token } 							= require("./config.json");
+const musicList 							= require('./data/Musics.json');
+const checkSchedule 							= require("./src/checkSchedule.js");
 const client = new Client({
 	intents: Object.values(GatewayIntentBits).reduce((a, b) => a | b)
 });
@@ -37,9 +40,20 @@ for (const file of commandFiles)
 }
 
 client.on("interactionCreate", async interaction => {
-	if (!interaction.isChatInputCommand() && !interaction.isAutocomplete()) return;
+	if (!interaction.isChatInputCommand() && !interaction.isAutocomplete() && !interaction.isButton() && !interaction.isModalSubmit()) return;
 
-	const command = interaction.client.commands.get(interaction.commandName);
+	let targetCommandName = "";
+
+	if (interaction.isChatInputCommand() || interaction.isAutocomplete())
+	{
+		targetCommandName = interaction.commandName;
+	}
+	else if (interaction.isButton() || interaction.isModalSubmit())
+	{
+		targetCommandName = interaction.customId.split("_")[0];
+	}
+
+	const command = interaction.client.commands.get(targetCommandName);
 
 	if (!command) {
 		console.error(`${interaction.commandName} が見つかりません。`);
@@ -55,6 +69,14 @@ client.on("interactionCreate", async interaction => {
 				await command.autocomplete(interaction);
 			}
 		}
+		else if (interaction.isButton())
+		{
+			await command.buttonHandler(interaction);
+		}
+		else if (interaction.type === InteractionType.ModalSubmit)
+		{
+			await command.modalHandler(interaction);
+		}
 		else if (interaction.isChatInputCommand())
 		{
 			await command.execute(interaction);
@@ -68,8 +90,9 @@ client.on("interactionCreate", async interaction => {
 });
 
 
-client.on("ready", () => {
+client.once("ready", async () => {
 	console.log(`${client.user.tag} でログインしています。`);
+	await checkSchedule.CheckSchedule(client);
 });
 
 client.login(token);

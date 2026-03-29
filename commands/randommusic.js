@@ -27,18 +27,18 @@ module.exports = {
 		.setName("difficulty1")
 		.setDescription("特定の難易度から選ぶための項目")
 		.addChoices(
-			{ name: "エキスパート", value: 1 },
-			{ name: "マスター", 	value: 2 },
-			{ name: "アペンド", 	value: 3 }
+			{ name: "エキスパート", value: 0 },
+			{ name: "マスター", 	value: 1 },
+			{ name: "アペンド", 	value: 2 }
 		))
 	.addIntegerOption(option =>
 		option
 		.setName("difficulty2")
 		.setDescription("特定の2つの難易度から選ぶための項目")
 		.addChoices(
-			{ name: "エキスパート",	value: 1 },
-			{ name: "マスター",	value: 2 },
-			{ name: "アペンド",	value: 3 }
+			{ name: "エキスパート",	value: 0 },
+			{ name: "マスター",	value: 1 },
+			{ name: "アペンド",	value: 2 }
 		)),
 
 	async execute(interaction)
