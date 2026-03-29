@@ -7,6 +7,7 @@ const {
 	StringSelectMenuBuilder, 
 	StringSelectMenuOptionBuilder,
 	ChannelSelectMenuBuilder,
+	MentionableSelectMenuBuilder,
 	ChannelType,
 	ButtonBuilder,
 	ButtonStyle
@@ -241,6 +242,11 @@ function ContentSetting()
 	.setRequired(true)
 	.addChannelTypes(ChannelType.GuildText);
 
+	const mention = new MentionableSelectMenuBuilder()
+	.setCustomId("input_mention")
+	.setPlaceholder("メンションするロールまたはユーザーを選択してください")
+	.setRequired(false);
+
 	const message = new TextInputBuilder()
 	.setCustomId("input_message")
 	.setPlaceholder("選ばれた曲を入れたい場所に/music/をいれてください")
@@ -252,11 +258,15 @@ function ContentSetting()
 	.setLabel("送信先チャンネル")
 	.setChannelSelectMenuComponent(channelSelect);
 
+	const mentionLabel = new LabelBuilder()
+	.setLabel("メンション対象(任意)")
+	.setMentionableSelectMenuComponent(mention);
+
 	const messageLabel = new LabelBuilder()
 	.setLabel("送信メッセージ")
 	.setTextInputComponent(message);
 
-	modal.addLabelComponents(channelLabel, messageLabel);
+	modal.addLabelComponents(channelLabel, mentionLabel, messageLabel);
 
 	return modal;
 }

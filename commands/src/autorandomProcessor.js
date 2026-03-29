@@ -91,7 +91,31 @@ async function ContentSettingProcess(interaction)
 
 	const channelField = interaction.fields.getField("input_channel");
 	const channel = channelField.values[0];
-	const message = interaction.fields.getTextInputValue("input_message");
+	let message = interaction.fields.getTextInputValue("input_message");
+
+	try {
+		const mentionField = interaction.fields.getField("input_mention");
+		const mention = mentionField?.values[0] || null;
+
+		if (mention)
+		{
+			const isRole = interaction.guild.roles.cache.has(mention);
+
+			if (isRole)
+			{
+				mentionText = `<@&${mention}>\n`;
+			}
+			else
+			{
+				mentionText = `<@${mention}>\n`;
+			}
+		
+			message = mentionText + message;
+		}
+	}
+	catch (error)
+	{
+	}
 
 	const contentData = {
 		channel: channel,
