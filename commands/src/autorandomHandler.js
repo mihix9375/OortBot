@@ -87,13 +87,15 @@ async function buttonHandlerLast(interaction)
 	if (suc)
 	{
 		contents = {
-			content: "正常に終了しました"
+			content: "正常に終了しました",
+			components: []
 		};
 	}
 	else
 	{
 		contents = {
-			content: "正常に終了しませんでした"
+			content: "正常に終了しませんでした",
+			components: []
 		};
 	}
 
