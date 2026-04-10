@@ -8,7 +8,7 @@ const musicData = require("../../data/Musics.json");
 async function ParseData(data, interaction)
 {
 	const date = new Date();
-	const id = date.toFormat("YYYYMMDDHH24MISS");
+	const id = Number(date.toFormat("YYYYMMDDHH24MISS"));
 	const yearNow = date.toFormat("YYYY");
 	let parsedData = {
 		id: id,

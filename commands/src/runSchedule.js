@@ -17,7 +17,7 @@ async function RunSchedule(client, id)
 
 	if (task.is_repeat == 1)
 	{
-		schedule.scheduleJob(new Date(task.target), async function() {
+		schedule.scheduleJob(String(id), new Date(task.target), async function() {
 			const channel = await client.channels.fetch(task.channel_id);
 			
 			const message = task.message.replace("/music/", task.musics);
@@ -50,12 +50,15 @@ async function RunSchedule(client, id)
 	}
 	else if (task.is_repeat == 0)
 	{
-		schedule.scheduleJob(new Date(task.target), async function(client) {
+		schedule.scheduleJob(String(id), new Date(task.target), async function(client) {
 			const channel = await client.channels.fetch(task.channel_id);
 
 			const message = task.message.replace("/music/", task.musics);
 
 			await channel.send(message);
+
+			const deleteTask = table.db.prepare("DELETE FROM schedules WHERE id = ?");
+			deleteTask.run(task.id);
 		});
 	}
 	else
