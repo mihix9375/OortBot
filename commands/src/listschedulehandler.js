@@ -24,12 +24,24 @@ async function first(interaction)
 		return { embeds: [embed], components: [row] };
 	}
 	
+	const reload = new ButtonBuilder()
+	.setCustomId(`listschedule_reload`)
+	.setLabel("↺")
+	.setStyle(ButtonStyle.Success)
+	
+	const close = new ButtonBuilder()
+	.setCustomId("listschedule_close")
+	.setLabel("×")
+	.setStyle(ButtonStyle.Danger)
+	
+	const row = new ActionRowBuilder().addComponents(reload, close);
+
 	embed.addFields({
 		name: "\u200B",
 		value: "ここには何もないようです :("
 	});
 
-	return { embeds: [embed] };
+	return { embeds: [embed], components: [row] };
 }
 
 async function buttonHandler(interaction)
@@ -37,24 +49,46 @@ async function buttonHandler(interaction)
 	const embed = new EmbedBuilder()
 	.setTitle("スケジュール一覧")
 	const schedules = table.db.prepare("SELECT * FROM schedules").all();
-	const currentIndex = Number(interaction.customId.split("_").pop());
-	
-	if (schedules.length > 0)
+
+	const mode = interaction.customId.split("_").pop();
+
+	if (mode === "reload")
 	{
-		const row 	= rowBuilder(currentIndex, schedules.length);
-		const content 	= contentBuilder(schedules[currentIndex - 1]);
+		return await first(interaction);
+	}
+	else
+	{
+		const currentIndex = Number(interaction.customId.split("_").pop());
 	
-		embed.addFields(content);
+		if (schedules.length > 0)
+		{
+			const row 	= rowBuilder(currentIndex, schedules.length);
+			const content 	= contentBuilder(schedules[currentIndex - 1]);
+		
+			embed.addFields(content);
+
+			return { embeds: [embed], components: [row] };
+		}
+
+		const reload = new ButtonBuilder()
+		.setCustomId(`listschedule_reload`)
+		.setLabel("↺")
+		.setStyle(ButtonStyle.Success)
+	
+		const close = new ButtonBuilder()
+		.setCustomId("listschedule_close")
+		.setLabel("×")
+		.setStyle(ButtonStyle.Danger)
+	
+		const row = new ActionRowBuilder().addComponents(reload, close);
+
+		embed.addFields({
+			name: "\u200B",
+			value: "ここには何もないようです :("
+		});
 
 		return { embeds: [embed], components: [row] };
 	}
-	
-	embed.addFields({
-		name: "\u200B",
-		value: "ここには何もないようです :("
-	});
-
-	return { embeds: [embed] };
 }
 
 function rowBuilder(currentIndex, maxIndex)
@@ -78,7 +112,7 @@ function rowBuilder(currentIndex, maxIndex)
 	.setDisabled(currentIndex === 1);
 
 	const reload = new ButtonBuilder()
-	.setCustomId("listschedule_reload")
+	.setCustomId(`listschedule_reload`)
 	.setLabel("↺")
 	.setStyle(ButtonStyle.Success)
 

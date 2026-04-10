@@ -11,7 +11,14 @@ module.exports = {
 	async buttonHandler(interaction)
 	{
 		if (!interaction.customId.startsWith("listschedule_")) return;
-		await interaction.update(await handler.buttonHandler(interaction));
+		if (interaction.customId.split("_").pop() === "close")
+		{
+			await interaction.message.delete();
+		}
+		else
+		{
+			await interaction.update(await handler.buttonHandler(interaction));
+		}
 	},
 
 	async execute(interaction)

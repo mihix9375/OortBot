@@ -36,12 +36,12 @@ async function CheckSchedule(client)
 
 		await runSchedule.RunSchedule(client, task.id);
 
-		if (deleteTask > 0)
+		if (countDelete > 0)
 		{
 			console.log(`${deleteTask} 個のタスクが過去のため削除されました`);
 		}
 
-		if (updateTask > 0)
+		if (countUpdate > 0)
 		{
 			console.log(`${updateTask} 個のタスクが過去のため更新されました`);
 		}
