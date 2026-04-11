@@ -63,5 +63,9 @@ async function fetchMusicData() {
   }
 }
 
+module.exports = {
+	fetchMusicData
+};
+
 // 12. 関数を実行
 fetchMusicData();
