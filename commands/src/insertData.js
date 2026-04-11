@@ -45,7 +45,7 @@ async function ParseData(data, interaction)
 		}
 		
 		let targetMs = Date.parse(`${yearNow}-${month}-${day}T${splitTime[0]}:${splitTime[1]}:00`);
-		const startMs = Date.parse(`${splitStart[0]}-${splitStart[1]}-${splitStart[2]}T${splitStart[3]}:${splitStart[4]}:00`);
+		const startMs = Date.parse(`${splitStart[0]}-${splitStart[1]}-${splitStart[2]}T${splitTime[0]}:${splitTime[1]}:00`);
 		const intervalMs = 86400000 * Number(splitInterval[0]) + 3600000 * Number(splitInterval[1]) + 60000 * Number(splitInterval[2]);
 
 		if (startMs > targetMs)

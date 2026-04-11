@@ -129,11 +129,11 @@ function ScheduleSetting(num)
 		const startDay = new TextInputBuilder()
 		.setCustomId("input_start")
 		.setLabel("開始する日時(yyyy/mm/dd/hh/mm)(任意)")
-		.setPlaceholder("例(2026年5月8日10時30分から始める場合): 2026/05/08/10/30")
+		.setPlaceholder("例(2026年5月8日から始める場合): 2026/05/08")
 		.setStyle(TextInputStyle.Short)
 		.setRequired(false)
-		.setMaxLength(16)
-		.setMinLength(16);
+		.setMaxLength(10)
+		.setMinLength(10);
 
 		modal.addComponents(
 			new ActionRowBuilder().addComponents(timeInput),
