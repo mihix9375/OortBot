@@ -22,6 +22,27 @@ db.exec(`
 	)
 `);
 
+db.exec(`
+	CREATE TABLE IF NOT EXISTS images (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	user_id TEXT NOT NULL,
+	image TEXT NOT NULL
+	)
+`);
+
+db.exec(`
+	CREATE TABLE IF NOT EXISTS score (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	user_id TEXT NOT NULL,
+	music_name TEXT NOT NULL,
+	score INTEGER NOT NULL,
+	perfect INTEGER NOT NULL,
+	great INTEGER NOT NULL,
+	good INTEGER NOT NULL,
+	other INTEGER NOT NULL
+	)
+`);
+
 module.exports = {
 	db
 }
