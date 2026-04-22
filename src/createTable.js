@@ -8,7 +8,7 @@ const db 	= new DataBase(dbPath);
 
 /*
  * schedules 		: the table for store schedule datas.
- * id 				: the schedule id. the date and time when user scheduled. millisec. 
+ * id 				: the schedule id. the date and time when user scheduled. 
  * user_id 			: the user's id. 													ex: 11111111, 203846459
  * is_repeat		: the schedule type. only once or repeat.							ex: (for once) 0, (for repeat) 1
  * current			: the date and time when scheduled millisec.
@@ -18,7 +18,7 @@ const db 	= new DataBase(dbPath);
  * channel_id		: the channel's id, bot will send.
  * random_setting	: the setting to random pick music.
  * musics			: the picked music.
- * message			: the text,bot will send.
+ * message			: the text, bot will send.
  */
 db.exec(`
 	CREATE TABLE IF NOT EXISTS schedules (
