@@ -48,7 +48,6 @@ module.exports = {
 			interaction.options.getInteger("min"), 
 			interaction.options.getInteger("max"),
 			[interaction.options.getInteger("difficulty1"), interaction.options.getInteger("difficulty2")].filter(x => x),
-			interaction.client.musicData.list,
 			interaction.options.getInteger("num"));
 		
 		if (result.length == 0)

@@ -1,10 +1,14 @@
 // 1. 必要なライブラリを読み込む
 const axios = require('axios');
 const cheerio = require('cheerio');
-const fs = require("fs").promises;
+const table = require("./createTable.js");
 
 // 2. データを取得したいURLを指定
 const url = 'https://pjsekai.com/?aad6ee23b0#table';
+
+const insert = table.db.prepare(`INSERT INTO musics (id, title, expertLevel, masterLevel, appendLevel, expertCombo, masterCombo, appendCombo, duration, bpm)
+		  						VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+								`);
 
 // 3. スクレイピングを実行する非同期関数を定義
 async function fetchMusicData() {
@@ -38,25 +42,20 @@ async function fetchMusicData() {
       const duration = $(tds[14]).text().trim(); // 時間 (15番目のセル)
       const bpm = $(tds[15]).text().trim();
 
-      // 10. 取得したデータをオブジェクトにまとめて配列に追加
-      musicList.push({
- 	id,
-        title,
-        expertLevel,
-        masterLevel,
-	appendLevel,
-	expertCombo,
-        masterCombo,
-	appendCombo,
-        duration,
-	bpm,
-      });
+	  insert.run(
+		  Number(id),
+		  title,
+		  Number(expertLevel),
+		  Number(masterLevel),
+		  appendLevel === "-" ? 0 : Number(appendLevel),
+		  Number(expertCombo),
+		  Number(masterCombo),
+		  appendCombo === "-" ? 0 : Number(appendCombo),
+		  duration,
+		  bpm
+	  );
     });
-
-    await fs.writeFile("./data/Musics.json", JSON.stringify(musicList, null, 2), (err) => {
-	    if (err) throw err;
-    });
-    console.log("ファイルが出力されました。");
+    console.log("楽曲データを更新しました");
 
   } catch (error) {
     console.error('データの取得に失敗しました:', error);

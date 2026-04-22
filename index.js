@@ -1,11 +1,11 @@
 require("./src/createTable.js");
 
-const fs 								= require("node:fs");
-const path 								= require("node:path");
+const fs 															= require("node:fs");
+const path 															= require("node:path");
 const { Client, GatewayIntentBits, Collection, InteractionType } 	= require("discord.js");
-const { token } 							= require("./config.json");
-const musicList 							= require('./data/Musics.json');
-const checkSchedule 							= require("./src/checkSchedule.js");
+const { token } 													= require("./config.json");
+const musicList 													= require('./data/Musics.json');
+const checkSchedule 												= require("./src/checkSchedule.js");
 const client = new Client({
 	intents: Object.values(GatewayIntentBits).reduce((a, b) => a | b)
 });
@@ -15,12 +15,6 @@ client.commands = new Collection();
 const commandsPath = path.join(__dirname, "commands");
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
 console.log(commandFiles);
-
-client.musicData = {
-	list: 		musicList,
-	idMap: 		new Map(musicList.map(music => [music.id, 		music])),
-	titleMap:	new Map(musicList.map(music => [music.title, 		music])),
-};
 
 console.log(`♪ ${musicList.length} 曲を読み込みました。`);
 

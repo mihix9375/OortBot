@@ -7,6 +7,34 @@ const dbPath 	= path.join(dataDir, "database.sqlite");
 const db 	= new DataBase(dbPath);
 
 /*
+ * musics 		: the table for store music datas.
+ * id 			: the music id. from https://pjsekai.com/?aad6ee23b0#table.
+ * title		: the music title.
+ * expertLevel	: the expert level of music.
+ * masterLevel 	: the master level of music.
+ * appendLevel	: the append level of music.
+ * expertCombo	: the expert combo of music.
+ * masterCombo	: the master combo of music.
+ * appendCombo	: the append combo of music.
+ * duration		: the duration of music.
+ * bpm			: the bpm of music.
+ */
+db.exec(`
+	CREATE TABLE IF NOT EXISTS musics (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	title TEXT NOT NULL,
+	expertLevel INTEGER NOT NULL,
+	masterLevel INTEGER NOT NULL,
+	appendLevel INTEGER NOT NULL DEFAULT 0,
+	expertCombo INTEGER NOT NULL,
+	masterCombo INTEGER NOT NULL,
+	appendCombo INTEGER NOT NULL DEFAULT 0,
+	duration TEXT NOT NULL,
+	bpm TEXT NOT NULL
+	)
+`);
+
+/*
  * schedules 		: the table for store schedule datas.
  * id 				: the schedule id. the date and time when user scheduled. 
  * user_id 			: the user's id. 													ex: 11111111, 203846459

@@ -1,12 +1,14 @@
+const table = require("../../src/createTable.js"); 
 
-
-function PickMusic(min, max, difficulty, musicList, num)
+function PickMusic(min, max, difficulty, num)
 {
+	const musicList = table.db.prepare("SELECT * FROM musics").all();
+
 	let exMusics = [];
 	let msMusics = [];
 	let apMusics = [];
 
-	if (!difficulty || difficulty.length === 0)
+	if (!difficulty.includes(0))
 	{
 		difficulty = [0, 1, 2];
 	}
