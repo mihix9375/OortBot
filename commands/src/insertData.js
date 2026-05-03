@@ -85,7 +85,7 @@ async function ParseData(data, interaction)
 
 	const range = data.random.range;
 	const num = Number(data.random.num);
-	const diff = [data.random.difficulty1, data.random.difficulty2].flat().filter(x => x !== null);
+	const diff = [data.random.difficulty1, data.random.difficulty2].flat().filter(x => x !== null && x !== undefined);
 	const max = Number(range.split("/")[1]);
 	const min = Number(range.split("/")[0]);
 

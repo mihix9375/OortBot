@@ -47,7 +47,7 @@ module.exports = {
 		var result = musicSelector.PickMusic(
 			interaction.options.getInteger("min"), 
 			interaction.options.getInteger("max"),
-			[interaction.options.getInteger("difficulty1"), interaction.options.getInteger("difficulty2")].filter(x => x !== null),
+			[interaction.options.getInteger("difficulty1"), interaction.options.getInteger("difficulty2")].filter(x => x !== null && x !== undefined),
 			interaction.options.getInteger("num"));
 		
 		if (result.length == 0)
