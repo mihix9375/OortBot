@@ -1,4 +1,5 @@
 const { SlashCommandBuilder } = require("discord.js");
+const table = require("../src/createTable.js");
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -13,7 +14,7 @@ module.exports = {
 
 	async autocomplete(interaction)
 	{
-		const musicList = interaction.client.musicData.list;
+		const musicList = table.db.prepare("SELECT * FROM musics").all();
 		const focusedValue = interaction.options.getFocused();
 
 		const choices = musicList
@@ -23,18 +24,16 @@ module.exports = {
 		await interaction.respond(
 			choices.map(choice => ({
 				name: choice.title,
-				value: choice.id,
+				value: String(choice.id),
 			}))
 		);
 	},
 
 	async execute(interaction)
 	{
-		const musicIdMap = interaction.client.musicData.idMap;
+		const selectedMusicId = Number(interaction.options.getString("musicname"));
 
-		const selectedMusicId = interaction.options.getString("musicname");
-
-		const musicData = musicIdMap.get(selectedMusicId);
+		const musicData = table.db.prepare("SELECT * FROM musics WHERE id = ?").get(selectedMusicId);
 
 		if (!musicData)
 		{

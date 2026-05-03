@@ -37,8 +37,8 @@ module.exports = {
 		.setDescription("特定の2つの難易度から選ぶための項目")
 		.addChoices(
 			{ name: "エキスパート",	value: 0 },
-			{ name: "マスター",	value: 1 },
-			{ name: "アペンド",	value: 2 }
+			{ name: "マスター",		value: 1 },
+			{ name: "アペンド",		value: 2 }
 		)),
 
 	async execute(interaction)
@@ -47,7 +47,7 @@ module.exports = {
 		var result = musicSelector.PickMusic(
 			interaction.options.getInteger("min"), 
 			interaction.options.getInteger("max"),
-			[interaction.options.getInteger("difficulty1"), interaction.options.getInteger("difficulty2")].filter(x => x),
+			[interaction.options.getInteger("difficulty1"), interaction.options.getInteger("difficulty2")].filter(x => x !== null),
 			interaction.options.getInteger("num"));
 		
 		if (result.length == 0)

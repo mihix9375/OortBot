@@ -1,7 +1,6 @@
 const table = require("../../src/createTable.js");
 const selector = require("./musicSelector.js");
 const schedule = require("node-schedule");
-const musicData = require("../../data/Musics.json");
 
 async function RunSchedule(client, id)
 {
@@ -30,7 +29,6 @@ async function RunSchedule(client, id)
 							Number(randomSetting[1]), 
 							Number(randomSetting[0]),
 							[randomSetting[3], randomSetting[4]].filter(x => x),
-							musicData,
 							Number(randomSetting[2])
 			);
 			

@@ -3,7 +3,6 @@ require("date-utils");
 const selector = require("./musicSelector.js");
 const table = require("../../src/createTable.js");
 const runSchedule = require("./runSchedule.js");
-const musicData = require("../../data/Musics.json");
 
 async function ParseData(data, interaction)
 {
@@ -86,11 +85,11 @@ async function ParseData(data, interaction)
 
 	const range = data.random.range;
 	const num = Number(data.random.num);
-	const diff = [data.random.difficulty1, data.random.difficulty2].flat().filter(x => x);
+	const diff = [data.random.difficulty1, data.random.difficulty2].flat().filter(x => x !== null);
 	const max = Number(range.split("/")[1]);
 	const min = Number(range.split("/")[0]);
 
-	const musics = selector.PickMusic(min, max, diff, musicData, num);
+	const musics = selector.PickMusic(min, max, diff, num);
 	
 	let text = "\`\`\`";
 	musics.forEach(music => {

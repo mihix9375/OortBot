@@ -8,12 +8,12 @@ function PickMusic(min, max, difficulty, num)
 	let msMusics = [];
 	let apMusics = [];
 
-	if (!difficulty.includes(0))
+	if (difficulty.length === 0)
 	{
 		difficulty = [0, 1, 2];
 	}
 
-	if (difficulty.indexOf(0) !== -1)
+	if (difficulty.includes(0))
 	{
 		exMusics = musicList
 			.filter( music => music.expertLevel >= min && music.expertLevel <= max )
@@ -25,7 +25,7 @@ function PickMusic(min, max, difficulty, num)
 			});
 	}
 
-	if (difficulty.indexOf(1) !== -1)
+	if (difficulty.includes(1))
 	{
 		msMusics = musicList
 			.filter( music => music.masterLevel >= min && music.masterLevel <= max )
@@ -37,7 +37,7 @@ function PickMusic(min, max, difficulty, num)
 			});
 	}
 
-	if (difficulty.indexOf(2) !== -1)
+	if (difficulty.includes(2))
 	{
 		apMusics = musicList
 			.filter( music => music.appendLevel >= min && music.appendLevel <= max )
