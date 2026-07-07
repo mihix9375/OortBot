@@ -1,6 +1,6 @@
 *~
 *.swp
-*.json
+config.json
 node_modules
 *.sqlite
 OortBotAI/
