@@ -17,6 +17,6 @@ module.exports = {
 
 	async execute(interaction)
 	{
-		await interaction.reply(await canceler.Cancel(interaction.options.getInteger("id")));
+		await interaction.reply(await canceler.Cancel(interaction.options.getInteger("id"), interaction.guildId));
 	}
 }

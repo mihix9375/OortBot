@@ -1,5 +1,11 @@
-const { SlashCommandBuilder } = require("discord.js");
-const table = require("../src/createTable.js");
+const { SlashCommandBuilder,
+        EmbedBuilder
+        }   = require("discord.js");
+const table                     = require("../src/createTable.js");
+const DataBase                  = require("better-sqlite3");
+const path                      = require("node:path");
+
+const db       = new DataBase(path.join(table.dataDir, "musics.sqlite"));
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -14,7 +20,7 @@ module.exports = {
 
 	async autocomplete(interaction)
 	{
-		const musicList = table.db.prepare("SELECT * FROM musics").all();
+		const musicList = db.prepare("SELECT * FROM musics").all();
 		const focusedValue = interaction.options.getFocused();
 
 		const choices = musicList
@@ -33,7 +39,7 @@ module.exports = {
 	{
 		const selectedMusicId = Number(interaction.options.getString("musicname"));
 
-		const musicData = table.db.prepare("SELECT * FROM musics WHERE id = ?").get(selectedMusicId);
+		const musicData = db.prepare("SELECT * FROM musics WHERE id = ?").get(selectedMusicId);
 
 		if (!musicData)
 		{
@@ -41,14 +47,36 @@ module.exports = {
 			return;
 		}
 		
-		await interaction.reply(
-			`曲名: **${musicData.title}**\n` +
-			`ID: \`${musicData.id}\`\n` +
-			`EXPERTレベル: **${musicData.expertLevel}** (コンボ数: ${musicData.expertCombo})\n` +
-			`MASTERレベル: **${musicData.masterLevel}** (コンボ数: ${musicData.masterCombo})\n` +
-			`APPENTレベル: **${musicData.appendLevel}** (コンボ数: ${musicData.appendCombo})\n` +
-			`BPM: ${musicData.bpm}\n` +
-			`収録時間: ${musicData.duration}`
-		);
+        const embed = new EmbedBuilder()
+            .setTitle(musicData.title)
+            .addFields(
+                {
+                    name: "EXPERT",
+                    value: `Lv **${musicData.expertLevel}**\n(Combo: ${musicData.expertCombo})\n`,
+                    inline: true
+                },
+                {
+			        name: "MASTER",
+                    value: `Lv **${musicData.masterLevel}**\n(Combo: ${musicData.masterCombo})\n`,
+                    inline: true
+                },
+                {
+			        name: "APPENT",
+                    value: `Lv: **${musicData.appendLevel}**\n(Combo: ${musicData.appendCombo})\n`,
+                    inline: true
+                },
+                {
+			        name: "BPM",
+                    value: `${musicData.bpm}`,
+                    inline: true
+                },
+                {
+			        name: "収録時間",
+                    value: `${musicData.duration}`,
+                    inline: true
+                }
+            );
+
+		await interaction.reply({embeds: [embed]});
 	},
 };

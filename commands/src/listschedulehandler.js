@@ -6,13 +6,17 @@ const { ActionRowBuilder,
 	ButtonStyle
 }		= require("discord.js");
 const table 	= require("../../src/createTable.js");
-const diffMap = { "0": "EXPERT", "1": "MASTER", "2": "APPEND" };
+const DataBase  = require("better-sqlite3");
+const path      = require("node:path");
+const diffMap   = { "0": "EXPERT", "1": "MASTER", "2": "APPEND" };
 
 async function first(interaction)
 {
 	const embed = new EmbedBuilder()
 	.setTitle("スケジュール一覧")
-	const schedules = table.db.prepare("SELECT * FROM schedules").all();
+
+    const db        = new DataBase(path.join(table.dataDir, `${interaction.guildId}.sqlite`));
+	const schedules = db.prepare("SELECT * FROM schedules").all();
 	
 	if (schedules.length > 0)
 	{
@@ -48,7 +52,9 @@ async function buttonHandler(interaction)
 {
 	const embed = new EmbedBuilder()
 	.setTitle("スケジュール一覧")
-	const schedules = table.db.prepare("SELECT * FROM schedules").all();
+
+    const db        = new DataBase(path.join(table.dataDir, `${interaction.guildId}.sqlite`));
+	const schedules = db.prepare("SELECT * FROM schedules").all();
 
 	const mode = interaction.customId.split("_").pop();
 

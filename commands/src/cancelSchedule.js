@@ -1,16 +1,19 @@
-const table = require("../../src/createTable.js");
-const schedule = require("node-schedule");
+const table     = require("../../src/createTable.js");
+const schedule  = require("node-schedule");
+const DataBase  = require("better-sqlite3");
+const path      = require("node:path");
 
-async function Cancel(id)
+async function Cancel(schedule_id, guild_id)
 {
-	const cancel = table.db.prepare("DELETE FROM schedules WHERE id = ?");
+    const db        = new DataBase(path.join(table.dataDir, `${guild_id}.sqlite`));
+	const cancel    = db.prepare("DELETE FROM schedules WHERE id = ?");
 
-	const result = cancel.run(id);
+	const result = cancel.run(schedule_id);
 
 	if (result.changes != 0)
 	{
 		try {
-			await schedule.cancelJob(String(id));
+			await schedule.cancelJob(String(schedule_id));
 		}
 		catch (e)
 		{

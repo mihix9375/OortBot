@@ -1,8 +1,11 @@
-const table = require("../../src/createTable.js"); 
+const table     = require("../../src/createTable.js"); 
+const DataBase  = require("better-sqlite3");
+const path      = require("node:path");
 
 function PickMusic(min, max, difficulty, num)
 {
-	const musicList = table.db.prepare("SELECT * FROM musics").all();
+    const db        = new DataBase(path.join(table.dataDir, "musics.sqlite"));
+	const musicList = db.prepare("SELECT * FROM musics").all();
 
 	let exMusics = [];
 	let msMusics = [];

@@ -82,7 +82,7 @@ async function buttonHandler(interaction)
 async function buttonHandlerLast(interaction)
 {
 	const user_id = interaction.user.id;
-	const [suc, id] = await inserter.ParseData(tempData.get(user_id), interaction.client);
+	const [suc, id] = await inserter.ParseData(tempData.get(user_id), interaction.client, interaction.guildId);
 	
 	if (suc)
 	{

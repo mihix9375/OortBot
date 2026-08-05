@@ -1,6 +1,5 @@
-require("./src/createTable.js");
-require("./src/downloadDatas.js");
-
+const download                                                      = require("./src/downloadDatas.js");
+const create_table                                                  = require("./src/createTable.js");
 const fs 															= require("node:fs");
 const path 															= require("node:path");
 const { Client, GatewayIntentBits, Collection, InteractionType } 	= require("discord.js");
@@ -32,6 +31,9 @@ for (const file of commandFiles)
 }
 
 client.on("interactionCreate", async interaction => {
+    
+    create_table.create_tables(interaction.guildId);
+
 	if (!interaction.isChatInputCommand() && !interaction.isAutocomplete() && !interaction.isButton() && !interaction.isModalSubmit()) return;
 
 	let targetCommandName = "";
@@ -84,7 +86,10 @@ client.on("interactionCreate", async interaction => {
 
 client.once("ready", async () => {
 	console.log(`${client.user.tag} でログインしています。`);
-	await checkSchedule.CheckSchedule(client);
+	create_table.create_musics_table();
+    download.fetchMusicData();
+    download.set_schedule();
+    await checkSchedule.CheckSchedule(client);
 });
 
 client.login(token);

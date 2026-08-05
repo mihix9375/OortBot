@@ -3,18 +3,22 @@ const schedule 	= require("node-schedule");
 const axios 	= require('axios');
 const cheerio 	= require('cheerio');
 const table 	= require("./createTable.js");
+const DataBase  = require("better-sqlite3");
+const path      = require("node:path");
 
 // 2. データを取得したいURLを指定
 const url = 'https://pjsekai.com/?aad6ee23b0#table';
 
-const insert = table.db.prepare(`INSERT OR IGNORE INTO musics (id, title, expertLevel, masterLevel, appendLevel, expertCombo, masterCombo, appendCombo, duration, bpm)
-		  						VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-								`);
+console.log(path.join(table.dataDir, "musics.sqlite"));
+const db        = new DataBase(path.join(table.dataDir, "musics.sqlite"));
 
 // 3. スクレイピングを実行する非同期関数を定義
 async function fetchMusicData() {
   	try {
     	console.log("データ取得中");
+        const insert    = db.prepare(`INSERT OR IGNORE INTO musics (id, title, expertLevel, masterLevel, appendLevel, expertCombo, masterCombo, appendCombo, duration, bpm)
+		  						VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+								`);
     	// 4. axiosでURLにアクセスし、HTMLデータを取得
     	const response = await axios.get(url);
     	const html = response.data;
@@ -63,17 +67,17 @@ async function fetchMusicData() {
 	}
 }
 
+function set_schedule()
+{
+    schedule.scheduleJob({
+    	rule: "0 20 * * *", 
+    	tz: "Asia/Tokyo" 
+    }, function(){
+    	fetchMusicData();
+    });
+}
+
 module.exports = {
-	fetchMusicData
+	fetchMusicData,
+    set_schedule
 };
-
-// 12. 関数を実行
-fetchMusicData();
-
-schedule.scheduleJob({
-	rule: "0 20 * * *", 
-	tz: "Asia/Tokyo" 
-}, function(){
-	fetchMusicData();
-});
-
