@@ -1,11 +1,12 @@
 require("date-utils");
 
-const selector = require("./musicSelector.js");
-const table = require("../../src/createTable.js");
-const runSchedule = require("./runSchedule.js");
-const musicData = require("../../data/Musics.json");
+const selector      = require("./musicSelector.js");
+const table         = require("../../src/createTable.js");
+const runSchedule   = require("./runSchedule.js");
+const DataBase      = require("better-sqlite3");
+const path          = require("node:path");
 
-async function ParseData(data, interaction)
+async function ParseData(data, interaction, guild_id)
 {
 	const date = new Date();
 	const id = Number(date.toFormat("YYYYMMDDHH24MISS"));
@@ -86,11 +87,11 @@ async function ParseData(data, interaction)
 
 	const range = data.random.range;
 	const num = Number(data.random.num);
-	const diff = [data.random.difficulty1, data.random.difficulty2].flat().filter(x => x);
+	const diff = [data.random.difficulty1, data.random.difficulty2].flat().filter(x => x !== null && x !== undefined);
 	const max = Number(range.split("/")[1]);
 	const min = Number(range.split("/")[0]);
 
-	const musics = selector.PickMusic(min, max, diff, musicData, num);
+	const musics = selector.PickMusic(min, max, diff, num);
 	
 	let text = "\`\`\`";
 	musics.forEach(music => {
@@ -106,23 +107,24 @@ async function ParseData(data, interaction)
 	parsedData.random_setting = `${max}/${min}/${num}/${data.random.difficulty1}/${data.random.difficulty2}`;
 	parsedData.musics = text;
 
-	if (await InsertData(parsedData))
+	if (await InsertData(parsedData, guild_id))
 	{
-		await runSchedule.RunSchedule(interaction, id);
+		await runSchedule.RunSchedule(interaction, id, guild_id);
 		return [true, id];
 	}
 
 	return [false, id];
 }
 
-async function InsertData(data)
+async function InsertData(data, guild_id)
 {
 	try {
-		const type = data.type === "repeat" ? 1 : 0;
-		const interval = data.interval || 0;
-		const start = data.start || 0;
+		const type      = data.type === "repeat" ? 1 : 0;
+		const interval  = data.interval || 0;
+		const start     = data.start || 0;
 
-		const insert = table.db.prepare(`
+        const db        = new DataBase(path.join(table.dataDir, `${guild_id}.sqlite`));
+		const insert    = db.prepare(`
 		INSERT INTO schedules (id, user_id, is_repeat, current, start, target, interval, channel_id, random_setting, musics, message)
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		`);

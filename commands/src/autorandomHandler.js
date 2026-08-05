@@ -1,7 +1,7 @@
 const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
-const fs 		= require("node:fs");
+const fs 			= require("node:fs");
 const processor 	= require("./autorandomProcessor.js");
-const ui		= require("./autorandomUI.js");
+const ui			= require("./autorandomUI.js");
 const inserter 		= require("./insertData.js");
 const tempData 		= new Map();
 const button 		= new Map();
@@ -82,7 +82,7 @@ async function buttonHandler(interaction)
 async function buttonHandlerLast(interaction)
 {
 	const user_id = interaction.user.id;
-	const [suc, id] = await inserter.ParseData(tempData.get(user_id), interaction.client);
+	const [suc, id] = await inserter.ParseData(tempData.get(user_id), interaction.client, interaction.guildId);
 	
 	if (suc)
 	{

@@ -1,11 +1,10 @@
-require("./src/createTable.js");
-
-const fs 								= require("node:fs");
-const path 								= require("node:path");
+const download                                                      = require("./src/downloadDatas.js");
+const create_table                                                  = require("./src/createTable.js");
+const fs 															= require("node:fs");
+const path 															= require("node:path");
 const { Client, GatewayIntentBits, Collection, InteractionType } 	= require("discord.js");
-const { token } 							= require("./config.json");
-const musicList 							= require('./data/Musics.json');
-const checkSchedule 							= require("./src/checkSchedule.js");
+const { token } 													= require("./config.json");
+const checkSchedule 												= require("./src/checkSchedule.js");
 const client = new Client({
 	intents: Object.values(GatewayIntentBits).reduce((a, b) => a | b)
 });
@@ -15,14 +14,6 @@ client.commands = new Collection();
 const commandsPath = path.join(__dirname, "commands");
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
 console.log(commandFiles);
-
-client.musicData = {
-	list: 		musicList,
-	idMap: 		new Map(musicList.map(music => [music.id, 		music])),
-	titleMap:	new Map(musicList.map(music => [music.title, 		music])),
-};
-
-console.log(`♪ ${musicList.length} 曲を読み込みました。`);
 
 for (const file of commandFiles)
 {
@@ -40,6 +31,9 @@ for (const file of commandFiles)
 }
 
 client.on("interactionCreate", async interaction => {
+    
+    create_table.create_tables(interaction.guildId);
+
 	if (!interaction.isChatInputCommand() && !interaction.isAutocomplete() && !interaction.isButton() && !interaction.isModalSubmit()) return;
 
 	let targetCommandName = "";
@@ -92,7 +86,10 @@ client.on("interactionCreate", async interaction => {
 
 client.once("ready", async () => {
 	console.log(`${client.user.tag} でログインしています。`);
-	await checkSchedule.CheckSchedule(client);
+	create_table.create_musics_table();
+    download.fetchMusicData();
+    download.set_schedule();
+    await checkSchedule.CheckSchedule(client);
 });
 
 client.login(token);

@@ -1,11 +1,13 @@
-const table = require("../../src/createTable.js");
-const selector = require("./musicSelector.js");
-const schedule = require("node-schedule");
-const musicData = require("../../data/Musics.json");
+const table     = require("../../src/createTable.js");
+const selector  = require("./musicSelector.js");
+const schedule  = require("node-schedule");
+const DataBase  = require("better-sqlite3");
+const path      = require("node:path");
 
-async function RunSchedule(client, id)
+async function RunSchedule(client, id, guild_id)
 {
-	const getSchedule = table.db.prepare("SELECT * FROM schedules WHERE id = ?");
+    const db            = new DataBase(path.join(table.dataDir, `${guild_id}.sqlite`));
+	const getSchedule   = db.prepare("SELECT * FROM schedules WHERE id = ?");
 
 	const task = getSchedule.get(id);
 
@@ -18,8 +20,8 @@ async function RunSchedule(client, id)
 	if (task.is_repeat == 1)
 	{
 		schedule.scheduleJob(String(id), new Date(task.target), async function() {
-			const channel = await client.channels.fetch(task.channel_id);
-			
+
+            const channel = await client.channels.fetch(task.channel_id);		
 			const message = task.message.replace("/music/", task.musics);
 
 			await channel.send(message);
@@ -30,7 +32,6 @@ async function RunSchedule(client, id)
 							Number(randomSetting[1]), 
 							Number(randomSetting[0]),
 							[randomSetting[3], randomSetting[4]].filter(x => x),
-							musicData,
 							Number(randomSetting[2])
 			);
 			
@@ -42,22 +43,22 @@ async function RunSchedule(client, id)
 
 			const target = task.target + task.interval;
 
-			const update = table.db.prepare("UPDATE schedules SET target = ?, musics = ? WHERE id = ?");
+			const update = db.prepare("UPDATE schedules SET target = ?, musics = ? WHERE id = ?");
 			update.run(target, text, task.id);
 
-			await RunSchedule(client, task.id);
+			await RunSchedule(client, task.id, guild_id);
 		});
 	}
 	else if (task.is_repeat == 0)
 	{
-		schedule.scheduleJob(String(id), new Date(task.target), async function(client) {
+		schedule.scheduleJob(String(id), new Date(task.target), async function() {
 			const channel = await client.channels.fetch(task.channel_id);
 
 			const message = task.message.replace("/music/", task.musics);
 
 			await channel.send(message);
 
-			const deleteTask = table.db.prepare("DELETE FROM schedules WHERE id = ?");
+			const deleteTask = db.prepare("DELETE FROM schedules WHERE id = ?");
 			deleteTask.run(task.id);
 		});
 	}
