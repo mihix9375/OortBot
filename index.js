@@ -2,37 +2,37 @@ const download                                                      = require(".
 const create_table                                                  = require("./src/createTable.js");
 const fs 															= require("node:fs");
 const path 															= require("node:path");
-const { Client, GatewayIntentBits, Collection, InteractionType } 	= require("discord.js");
+const { Client, GatewayIntentBits, Collection, InteractionType } = require("discord.js");
 const { token } 													= require("./config.json");
 const checkSchedule 												= require("./src/checkSchedule.js");
 const client = new Client({
-	intents: Object.values(GatewayIntentBits).reduce((a, b) => a | b)
+	intents: [
+		GatewayIntentBits.Guilds,
+		GatewayIntentBits.GuildVoiceStates,
+		GatewayIntentBits.GuildMessages,
+	]
 });
 
 client.commands = new Collection();
 
 const commandsPath = path.join(__dirname, "commands");
-const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith(".js"));
-console.log(commandFiles);
+const commandFolders = fs.readdirSync(commandsPath);
 
-for (const file of commandFiles)
-{
-	const filePath 	= path.join(commandsPath, file);
-	const command 	= require(filePath);
+for (const folder of commandFolders) {
+	const folderPath = path.join(commandsPath, folder);
+	if (!fs.statSync(folderPath).isDirectory()) continue;
 
-	if ("data" in command && "execute" in command)
-	{
+	const command = require(folderPath);
+
+	if ("data" in command && "execute" in command) {
 		client.commands.set(command.data.name, command);
-	}
-	else
-	{
-		console.warn(`${filePath} にdataかexecuteが含まれていません。`);
+	} else {
+		console.warn(`${folderPath} にdataかexecuteが含まれていません。`);
 	}
 }
+console.log(`${client.commands.size}個のコマンドを読み込みました。`);
 
 client.on("interactionCreate", async interaction => {
-    
-    create_table.create_tables(interaction.guildId);
 
 	if (!interaction.isChatInputCommand() && !interaction.isAutocomplete() && !interaction.isButton() && !interaction.isModalSubmit()) return;
 
@@ -86,7 +86,6 @@ client.on("interactionCreate", async interaction => {
 
 client.once("ready", async () => {
 	console.log(`${client.user.tag} でログインしています。`);
-	create_table.create_musics_table();
     download.fetchMusicData();
     download.set_schedule();
     await checkSchedule.CheckSchedule(client);
