@@ -1,6 +1,6 @@
 const schedule 	= require("node-schedule");
 const table 	= require("#src/database/createTable");
-const runSchedule = require("../commands/autorandom/src/runSchedule");
+const runSchedule = require("../../commands/autorandom/src/runSchedule");
 const fs        = require("fs");
 const path      = require("node:path");
 const DataBase  = require("better-sqlite3");
