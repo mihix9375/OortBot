@@ -1,10 +1,11 @@
-const download                                                      = require("./src/downloadDatas");
-const create_table                                                  = require("./src/createTable");
+import type { Command } from "#src/types/Command";
+const download                                                      = require("./src/external/downloadDatas");
+const create_table                                                  = require("./src/database/createTable");
 const fs 															= require("node:fs");
 const path 															= require("node:path");
 const { Client, GatewayIntentBits, Collection, InteractionType } = require("discord.js");
 const { token } 													= require("./config.json");
-const checkSchedule 												= require("./src/checkSchedule");
+const checkSchedule 												= require("./src/core/checkSchedule");
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
@@ -22,13 +23,9 @@ for (const folder of commandFolders) {
 	const folderPath = path.join(commandsPath, folder);
 	if (!fs.statSync(folderPath).isDirectory() || folder === 'src') continue;
 
-	const command = require(folderPath);
+	const command = require(folderPath) as Command;
 
-	if ("data" in command && "execute" in command) {
-		client.commands.set(command.data.name, command);
-	} else {
-		console.warn(`${folderPath} にdataかexecuteが含まれていません。`);
-	}
+	client.commands.set(command.data.name, command);
 }
 console.log(`${client.commands.size}個のコマンドを読み込みました。`);
 

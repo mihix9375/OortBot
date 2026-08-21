@@ -1,7 +1,8 @@
-const { SlashCommandBuilder }   = require("discord");
-const musicSelector             = require("#src/musicSelector");
+import type { Command } from "#src/types/Command";
+const { SlashCommandBuilder }   = require("discord.js");
+const musicSelector             = require("#src/core/musicSelector");
 
-module.exports = {
+const command: Command = {
 	data: new SlashCommandBuilder()
 	.setName("random_music")
 	.setDescription("条件に合わせて楽曲をランダムに選びます。（下限 ≦ x ≦ 上限)")
@@ -68,3 +69,5 @@ module.exports = {
 		return;
 	}
 };
+
+module.exports = command;

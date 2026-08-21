@@ -1,3 +1,4 @@
+import type { Command } from "#src/types/Command";
 const { SlashCommandBuilder,
 	PermissionFlagsBits,
 	ButtonBuilder,
@@ -6,10 +7,10 @@ const { SlashCommandBuilder,
 	ModalBuilder,
 	TextInputBuilder,
 	TextInputStyle
-	}		= 	require("discord");
+	}		= 	require("discord.js");
 const handler		=	require("./src/autorandomHandler");
 
-module.exports = {
+const command: Command = {
 	data: new SlashCommandBuilder()
 	.setName("autorandom")
 	.setDescription("自動でランダム選曲を実行します")
@@ -59,4 +60,5 @@ module.exports = {
 		});
 	}
 }
-				
+
+module.exports = command;

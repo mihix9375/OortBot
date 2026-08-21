@@ -5,8 +5,8 @@ const { ActionRowBuilder,
 	EmbedBuilder,
 	ButtonStyle
 }		= require("discord");
-const table 	= require("#src/createTable");
-const openDB    = require("#src/openDB");
+const table 	= require("#src/database/createTable");
+const openDB    = require("#src/database/openDB");
 const DataBase  = require("better-sqlite3");
 const path      = require("node:path");
 const diffMap   = { "0": "EXPERT", "1": "MASTER", "2": "APPEND" };

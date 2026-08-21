@@ -1,9 +1,9 @@
+import type { Command } from "#src/types/Command";
 const { SlashCommandBuilder,
-	PermissionFlagsBits
-	} 	= require("discord");
-const canceler 	= require("./src/cancelSchedule");
+	PermissionFlagsBits} 			= require("discord.js");
+const canceler 				= require("./src/cancelSchedule");
 
-module.exports = {
+const command: Command = {
 	data: new SlashCommandBuilder()
 	.setName("cancelschedule")
 	.setDescription("IDを用いてスケジュールをキャンセルします")
@@ -20,3 +20,5 @@ module.exports = {
 		await interaction.reply(await canceler.Cancel(interaction.options.getInteger("id"), interaction.guildId));
 	}
 }
+
+module.exports = command;

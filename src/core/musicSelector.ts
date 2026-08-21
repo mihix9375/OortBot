@@ -1,4 +1,4 @@
-const table     = require("#src/createTable"); 
+const table     = require("#src/database/createTable"); 
 const DataBase  = require("better-sqlite3");
 const path      = require("node:path");
 

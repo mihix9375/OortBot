@@ -1,5 +1,5 @@
 const schedule 	= require("node-schedule");
-const table 	= require("./createTable");
+const table 	= require("#src/database/createTable");
 const runSchedule = require("../commands/autorandom/src/runSchedule");
 const fs        = require("fs");
 const path      = require("node:path");

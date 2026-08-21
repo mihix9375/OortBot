@@ -1,5 +1,5 @@
-const table     = require("#src/createTable");
-const openDB    = require("#src/openDB");
+const table     = require("#src/database/createTable");
+const openDB    = require("#src/database/openDB");
 const schedule  = require("node-schedule");
 const DataBase  = require("better-sqlite3");
 const path      = require("node:path");
