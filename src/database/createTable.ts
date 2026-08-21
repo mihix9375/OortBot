@@ -1,7 +1,7 @@
 const DataBase 	= require("better-sqlite3");
 const path	    = require("node:path");
 
-const dataDir 	= path.join(__dirname, "../data");
+const dataDir 	= path.join(__dirname, "../../data");
 
 function create_tables(guild_id)
 {
