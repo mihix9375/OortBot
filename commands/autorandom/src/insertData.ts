@@ -1,9 +1,9 @@
 require("date-utils");
 
-const selector      = require("#src/musicSelector.js");
-const table         = require("#src/createTable.js");
-const openDB        = require("#src/openDB.js")
-const runSchedule   = require("./runSchedule.js");
+const selector      = require("#src/musicSelector");
+const table         = require("#src/createTable");
+const openDB        = require("#src/openDB")
+const runSchedule   = require("./runSchedule");
 const DataBase      = require("better-sqlite3");
 const path          = require("node:path");
 

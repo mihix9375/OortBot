@@ -2,7 +2,7 @@
 const schedule 	= require("node-schedule");
 const axios 	= require('axios');
 const cheerio 	= require('cheerio');
-const table 	= require("./createTable.js");
+const table 	= require("./createTable");
 const DataBase  = require("better-sqlite3");
 const path      = require("node:path");
 

@@ -1,6 +1,6 @@
 const { SlashCommandBuilder,
-	PermissionFlagsBits } 	= require("discord.js");
-const handler 			= require("./src/listschedulehandler.js");
+	PermissionFlagsBits } 	= require("discord");
+const handler 			= require("./src/listschedulehandler");
 
 module.exports = {
 	data: new SlashCommandBuilder()

@@ -1,8 +1,8 @@
-const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const { ButtonBuilder, ButtonStyle, ActionRowBuilder } = require("discord");
 const fs 			= require("node:fs");
-const processor 	= require("./autorandomProcessor.js");
-const ui			= require("./autorandomUI.js");
-const inserter 		= require("./insertData.js");
+const processor 	= require("./autorandomProcessor");
+const ui			= require("./autorandomUI");
+const inserter 		= require("./insertData");
 const tempData 		= new Map();
 const button 		= new Map();
 const progressData 	= new Map();

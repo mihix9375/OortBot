@@ -1,7 +1,7 @@
 const { DataBase }  = require("better-sqlite3");
 const fs            = require("fs");
 const path          = require("node:path");
-const createDB      = require("./createTable.js");
+const createDB      = require("./createTable");
 
 function open_database(guildId)
 {

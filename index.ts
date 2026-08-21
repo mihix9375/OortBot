@@ -1,10 +1,10 @@
-const download                                                      = require("./src/downloadDatas.js");
-const create_table                                                  = require("./src/createTable.js");
+const download                                                      = require("./src/downloadDatas");
+const create_table                                                  = require("./src/createTable");
 const fs 															= require("node:fs");
 const path 															= require("node:path");
 const { Client, GatewayIntentBits, Collection, InteractionType } = require("discord.js");
 const { token } 													= require("./config.json");
-const checkSchedule 												= require("./src/checkSchedule.js");
+const checkSchedule 												= require("./src/checkSchedule");
 const client = new Client({
 	intents: [
 		GatewayIntentBits.Guilds,
@@ -20,7 +20,7 @@ const commandFolders = fs.readdirSync(commandsPath);
 
 for (const folder of commandFolders) {
 	const folderPath = path.join(commandsPath, folder);
-	if (!fs.statSync(folderPath).isDirectory()) continue;
+	if (!fs.statSync(folderPath).isDirectory() || folder === 'src') continue;
 
 	const command = require(folderPath);
 

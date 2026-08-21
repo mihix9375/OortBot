@@ -6,8 +6,8 @@ const { SlashCommandBuilder,
 	ModalBuilder,
 	TextInputBuilder,
 	TextInputStyle
-	}		= 	require("discord.js");
-const handler		=	require("./src/autorandomHandler.js");
+	}		= 	require("discord");
+const handler		=	require("./src/autorandomHandler");
 
 module.exports = {
 	data: new SlashCommandBuilder()

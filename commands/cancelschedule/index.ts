@@ -1,7 +1,7 @@
 const { SlashCommandBuilder,
 	PermissionFlagsBits
-	} 	= require("discord.js");
-const canceler 	= require("./src/cancelSchedule.js");
+	} 	= require("discord");
+const canceler 	= require("./src/cancelSchedule");
 
 module.exports = {
 	data: new SlashCommandBuilder()
