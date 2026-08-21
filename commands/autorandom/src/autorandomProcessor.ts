@@ -1,6 +1,6 @@
 require("date-utils");
 
-const {ButtonBuiler, ButtonStyle, ActionRowBuilder } = require("discord.js");
+const {ButtonBuiler, ButtonStyle, ActionRowBuilder } = require("discord");
 
 async function ScheduleSettingProcess(interaction, isRepeat)
 {

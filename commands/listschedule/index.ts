@@ -1,8 +1,9 @@
+import type { Command } from "#src/types/Command";
 const { SlashCommandBuilder,
-	PermissionFlagsBits } 	= require("discord.js");
-const handler 			= require("./src/listschedulehandler.js");
+	PermissionFlagsBits} 			= require("discord.js");
+const handler 				= require("./src/listschedulehandler");
 
-module.exports = {
+const command: Command = {
 	data: new SlashCommandBuilder()
 	.setName("listschedule")
 	.setDescription("スケジュールの一覧を表示します")
@@ -25,4 +26,6 @@ module.exports = {
 	{
 		await interaction.reply(await handler.first(interaction));
 	}
-}
+};
+
+module.exports = command;

@@ -4,8 +4,9 @@ const { ActionRowBuilder,
 	ButtonBuilder,
 	EmbedBuilder,
 	ButtonStyle
-}		= require("discord.js");
-const table 	= require("../../src/createTable.js");
+}		= require("discord");
+const table 	= require("#src/database/createTable");
+const openDB    = require("#src/database/openDB");
 const DataBase  = require("better-sqlite3");
 const path      = require("node:path");
 const diffMap   = { "0": "EXPERT", "1": "MASTER", "2": "APPEND" };
@@ -15,7 +16,7 @@ async function first(interaction)
 	const embed = new EmbedBuilder()
 	.setTitle("スケジュール一覧")
 
-    const db        = new DataBase(path.join(table.dataDir, `${interaction.guildId}.sqlite`));
+    const db        = openDB.open_database(interaction.guildId);
 	const schedules = db.prepare("SELECT * FROM schedules").all();
 	
 	if (schedules.length > 0)

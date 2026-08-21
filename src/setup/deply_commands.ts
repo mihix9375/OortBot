@@ -1,18 +1,17 @@
-const { REST, Routes } = require("discord.js");
-const { clientId, token } = require("./../config.json");
-const fs = require("node:fs");
-const rest = new REST({ version: "10" }).setToken(token);
-const args = process.argv.slice(2);
-const commands = [];
-const commandFiles = fs.readdirSync("./commands").filter(file => file.endsWith(".js"));
+const { REST, Routes } 		= require("discord.js");
+const { clientId, token } 	= require("./../config.json");
+const fs 					= require("node:fs");
+const rest 					= new REST({ version: "10" }).setToken(token);
+const args 					= process.argv.slice(2);
+const commands 				= [];
+const commandFiles 			= fs.readdirSync("./commands").filter(file => file.endsWith(""));
 
-for (const file of commandFiles)
-{
+for (const file of commandFiles) {
 	const command = require(`./../commands/${file}`);
 	commands.push(command.data.toJSON());
 }
 
-if (args[0] == 1) {
+if (args[0] == "1") {
 	(async () => {
 		try {
 			console.log("コマンドを削除しています。");
@@ -30,5 +29,5 @@ if (args[0] == 1) {
 		}
 	})();
 }
-else if (args[0] == 0) return;
-else return;
+else if (args[0] == '0') process.exit(0);
+else process.exit(0);

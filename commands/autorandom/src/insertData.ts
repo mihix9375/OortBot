@@ -1,8 +1,9 @@
 require("date-utils");
 
-const selector      = require("./musicSelector.js");
-const table         = require("../../src/createTable.js");
-const runSchedule   = require("./runSchedule.js");
+const selector      = require("#src/core/musicSelector");
+const table         = require("#src/database/createTable");
+const openDB        = require("#src/database/openDB")
+const runSchedule   = require("./runSchedule");
 const DataBase      = require("better-sqlite3");
 const path          = require("node:path");
 
@@ -123,7 +124,7 @@ async function InsertData(data, guild_id)
 		const interval  = data.interval || 0;
 		const start     = data.start || 0;
 
-        const db        = new DataBase(path.join(table.dataDir, `${guild_id}.sqlite`));
+        const db        = openDB.open_database(guild_id);
 		const insert    = db.prepare(`
 		INSERT INTO schedules (id, user_id, is_repeat, current, start, target, interval, channel_id, random_setting, musics, message)
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)

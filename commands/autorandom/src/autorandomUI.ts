@@ -11,7 +11,7 @@ const {
 	ChannelType,
 	ButtonBuilder,
 	ButtonStyle
-	} = require("discord.js");
+	} = require("discord");
 
 const schedule_once = new ButtonBuilder()
 .setCustomId("autorandom_button_once_1")

@@ -1,13 +1,14 @@
+import type { Command } from "#src/types/Command";
 const { SlashCommandBuilder,
         EmbedBuilder
         }   = require("discord.js");
-const table                     = require("../src/createTable.js");
+const table                     = require("#src/database/createTable");
 const DataBase                  = require("better-sqlite3");
 const path                      = require("node:path");
 
 const db       = new DataBase(path.join(table.dataDir, "musics.sqlite"));
 
-module.exports = {
+const command: Command = {
 	data: new SlashCommandBuilder()
 	.setName("musicinfo")
 	.setDescription("楽曲の情報を表示します。")
@@ -78,5 +79,7 @@ module.exports = {
             );
 
 		await interaction.reply({embeds: [embed]});
-	},
+	}
 };
+
+module.exports = command;
